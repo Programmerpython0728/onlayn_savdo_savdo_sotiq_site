@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: onlayn_savdo_db
+      POSTGRES_USER: onlayn_savdo_user
+      POSTGRES_PASSWORD: 571632
+
+  web:
+    build: .
+    command: >
+      bash -c "
+      python3 manage.py migrate &&
+      python3 manage.py collectstatic --no-input &&
+      gunicorn --reload -b 0.0.0.0:8000 config.wsgi --workers 1 --timeout 300 --log-level DEBUG
+      "
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DB_NAME: onlayn_savdo_db
+      DB_USER: onlayn_savdo_user
+      DB_PASSWORD: 571632_umat
+      DB_HOST: db
+      DB_PORT: 5432

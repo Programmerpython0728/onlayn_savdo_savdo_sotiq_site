@@ -25,9 +25,9 @@ def get_orderproduct_by_id(product_id):
         product = dictfetchone(cursor)
         return product
 
-def get_user_by_phone(phone_number):
+def get_user_by_phone(phone_number,email):
     with closing(connection.cursor()) as cursor:
-        cursor.execute(""" SELECT * from food_customer where phone_number =%s""",[phone_number])
-        user = dictfetchone(cursor)
+        cursor.execute(""" SELECT * from food_customer where phone_number =%s and email=%s""",[phone_number],[email])
+        user = dictfetchall(cursor)
         return user
 

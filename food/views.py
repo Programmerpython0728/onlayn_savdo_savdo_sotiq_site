@@ -14,7 +14,8 @@ def home_page(request):
 def order_page(request):
     if request.GET:
         user = get_user_by_phone(request.GET.get("phone_number",0))
-        return JsonResponse(user)
+        email=get_user_by_phone(request.GET.get('email',0))
+        return JsonResponse(user,email)
 
 def index(request):
     categories = Category.objects.all()
@@ -48,7 +49,7 @@ def main_order(request):
     model=Customer()
     if request.POST:
         try:
-            model = Customer.objects.get(phone_number=request.POST.get("phone_number", ""))
+            model = Customer.objects.get(phone_number=request.POST.get("phone_number", "email" ,""))
         except:
             model = Customer()
         form = CustomerForm(request.POST or None, instance=model)
